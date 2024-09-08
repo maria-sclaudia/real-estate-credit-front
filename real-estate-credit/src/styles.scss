@@ -1,0 +1,40 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+
+// Include the common styles for Angular Material.
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes
+$real-estate-credit-primary: mat.define-palette(mat.$indigo-palette);
+$real-estate-credit-accent: mat.define-palette(
+  mat.$pink-palette,
+  A200,
+  A100,
+  A400
+);
+$real-estate-credit-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object
+$real-estate-credit-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $real-estate-credit-primary,
+      accent: $real-estate-credit-accent,
+      warn: $real-estate-credit-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+@include mat.all-component-themes($real-estate-credit-theme);
+
+// Global styles
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

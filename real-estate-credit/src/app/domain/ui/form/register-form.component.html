@@ -1,0 +1,175 @@
+<section>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" placeholder="Digite seu nome" />
+      <mat-error
+        *ngIf="
+          form.get('name')?.hasError('required') && form.get('name')?.touched
+        "
+      >
+        Campo obrigatório
+      </mat-error>
+      <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
+        >Limite de 100 caracteres</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>E-mail</mat-label>
+      <input matInput formControlName="email" placeholder="Digite seu e-mail" />
+      <mat-error
+        *ngIf="
+          form.get('email')?.hasError('required') && form.get('email')?.touched
+        "
+        >Campo obrigatório</mat-error
+      >
+      <mat-error *ngIf="form.get('email')?.hasError('email')"
+        >E-mail inválido</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Data de nascimento</mat-label>
+      <input
+        matInput
+        formControlName="birthdate"
+        placeholder="Digite sua data de nascimento"
+        mask="d0/M0/0000"
+      />
+      <mat-error
+        *ngIf="
+          form.get('birthdate')?.hasError('required') &&
+          form.get('birthdate')?.touched
+        "
+        >Campo obrigatório</mat-error
+      >
+    </mat-form-field>
+
+    <div formArrayName="ddiPhones" style="width: 100%">
+      <div
+        *ngFor="let phone of ddiPhones.controls; let i = index"
+        [formGroupName]="i"
+        style="display: flex; align-items: center; width: 100%"
+      >
+        <mat-form-field appearance="fill">
+          <mat-label>DDI</mat-label>
+          <mat-select formControlName="ddi" (selectionChange)="onDDIChange(i)">
+            <mat-option
+              *ngFor="let country of countryService.response | async"
+              [value]="country.ddi"
+            >
+              +{{ country.ddi }} ({{ country.pais }})
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              form.get('ddi')?.hasError('required') && form.get('ddi')?.touched
+            "
+            >Campo obrigatório</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Telefone</mat-label>
+          <ng-container *ngIf="phone.get('ddi')?.value === 55; else noMask">
+            <input
+              matInput
+              formControlName="phone"
+              placeholder="Digite seu telefone"
+              mask="(00) 0000-0000 || (00) 0 0000-0000"
+            />
+            <mat-error
+              *ngIf="
+                form.get('phone')?.hasError('required') &&
+                form.get('phone')?.touched
+              "
+              >Campo obrigatório</mat-error
+            >
+          </ng-container>
+
+          <ng-template #noMask>
+            <input
+              matInput
+              formControlName="phone"
+              placeholder="Digite seu telefone"
+              type="number"
+            />
+            <mat-error
+              *ngIf="
+                form.get('phone')?.hasError('required') &&
+                form.get('phone')?.touched
+              "
+              >Campo obrigatório</mat-error
+            >
+          </ng-template>
+        </mat-form-field>
+
+        <button mat-icon-button *ngIf="i > 0" (click)="removePhone(i)">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          (click)="addPhone()"
+          *ngIf="
+            ddiPhones.at(i).get('ddi')?.value &&
+            ddiPhones.at(i).get('phone')?.value
+          "
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <label>É pessoa estrangeira?</label>
+      <mat-radio-group formControlName="isForeign">
+        <mat-radio-button value="yes">Sim</mat-radio-button>
+        <mat-radio-button value="no">Não</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div style="display: flex; align-items: center">
+      <mat-checkbox formControlName="acceptTerms" />
+      <p>
+        Aceito os
+        <a (click)="openDialog()" style="color: blue; cursor: pointer"
+          >termos de uso</a
+        >.
+      </p>
+    </div>
+  </form>
+
+  <footer>
+    <button
+      mat-flat-button
+      [disabled]="form.invalid || !form.controls.acceptTerms.value"
+      (click)="onSubmit()"
+    >
+      Salvar
+    </button>
+    <button mat-flat-button (click)="onClear()">Limpar</button>
+    <button mat-flat-button (click)="onCancel()">Cancelar</button>
+  </footer>
+</section>
+
+<ng-template #dialogContent let-dialogRef>
+  <div
+    style="display: flex; justify-content: space-between; align-items: center"
+  >
+    <h1 mat-dialog-title>Termos de uso</h1>
+    <button mat-icon-button (click)="dialog.closeAll()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="dialog.closeAll()">Fechar</button>
+  </div>
+</ng-template>
