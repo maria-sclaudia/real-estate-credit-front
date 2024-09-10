@@ -1,3 +1,11 @@
 :host {
   width: 100%;
+  .container {
+    padding: 16px;
+
+    footer {
+      display: flex;
+      gap: 6px;
+    }
+  }
 }

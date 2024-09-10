@@ -68,4 +68,9 @@ export class ProfileSearchComponent {
           });
       });
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

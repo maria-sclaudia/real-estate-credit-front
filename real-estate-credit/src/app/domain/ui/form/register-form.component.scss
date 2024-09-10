@@ -10,3 +10,76 @@
     margin: 0;
   }
 }
+
+.profile-form {
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+
+    .form-field {
+      flex: 1;
+    }
+
+    .form-field {
+      flex: 1;
+      min-width: 200px;
+    }
+  }
+
+  .ddi-field {
+    flex: 0 0 20%;
+  }
+
+  .phone-field {
+    flex: 0 0 30%;
+  }
+
+  .phone-list {
+    margin-bottom: 1rem;
+
+    .phone-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .foreign-status,
+  .terms-acceptance {
+    margin-bottom: 1rem;
+  }
+
+  .terms-acceptance {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .terms-link {
+      color: blue;
+      cursor: pointer;
+    }
+  }
+
+  .form-footer {
+    display: flex;
+    gap: 6px;
+    margin-top: 1rem;
+
+    button {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.close-dialog-button {
+  margin-left: auto;
+}
