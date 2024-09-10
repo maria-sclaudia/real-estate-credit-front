@@ -37,9 +37,8 @@ export class ProfileSearchComponent {
   public repos: Repository[] = [];
   public user?: User;
   public dataSource: Repository[] = [];
-  public isLoading: boolean = false;
+  public profileSearchService = inject(ProfileSearchService);
 
-  private profileSearchService = inject(ProfileSearchService);
   private destroy$ = new Subject<void>();
 
   constructor() {}
@@ -51,7 +50,6 @@ export class ProfileSearchComponent {
     this.user = undefined;
     this.repos = [];
 
-    this.isLoading = true;
     this.profileSearchService
       .getUser(this.form.value)
       .pipe(takeUntil(this.destroy$))
@@ -64,7 +62,6 @@ export class ProfileSearchComponent {
           .subscribe((repos) => {
             this.repos = repos;
             this.dataSource = this.repos;
-            this.isLoading = false;
           });
       });
   }
