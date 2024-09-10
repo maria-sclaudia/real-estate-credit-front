@@ -6,9 +6,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ProfileSearchService } from '../../data';
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { MatTableModule } from '@angular/material/table';
 import { Repository, User } from '../../types';
+import { GithubValidator } from 'src/app/shared/helpers';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'profile-search',
@@ -22,18 +26,21 @@ import { Repository, User } from '../../types';
     ReactiveFormsModule,
     HttpClientModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
-  providers: [ProfileSearchService],
+  providers: [ProfileSearchService, MatSnackBar],
   templateUrl: './profile-search.component.html',
   styleUrls: ['./profile-search.component.scss'],
 })
 export class ProfileSearchComponent {
-  public form = new FormControl('');
+  public form = new FormControl('', [GithubValidator.usernameValidator]);
   public repos: Repository[] = [];
   public user?: User;
   public dataSource: Repository[] = [];
+  public isLoading: boolean = false;
 
   private profileSearchService = inject(ProfileSearchService);
+  private destroy$ = new Subject<void>();
 
   constructor() {}
 
@@ -43,18 +50,22 @@ export class ProfileSearchComponent {
     if (!this.form.value) return;
     this.user = undefined;
     this.repos = [];
-    // adc destroy
-    this.profileSearchService.getUser(this.form.value).subscribe((user) => {
-      this.user = user;
-      console.log('user', this.user);
-      if (!this.user) return;
-      console.log('depois');
-      this.profileSearchService
-        .getRepos(this.form.value!)
-        .subscribe((repos) => {
-          this.repos = repos;
-          this.dataSource = this.repos;
-        });
-    });
+
+    this.isLoading = true;
+    this.profileSearchService
+      .getUser(this.form.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        this.user = user;
+        if (!this.user) return;
+        this.profileSearchService
+          .getRepos(this.form.value!)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((repos) => {
+            this.repos = repos;
+            this.dataSource = this.repos;
+            this.isLoading = false;
+          });
+      });
   }
 }

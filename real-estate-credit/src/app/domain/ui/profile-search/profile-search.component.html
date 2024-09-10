@@ -1,6 +1,10 @@
-<section>
-  <div style="display: flex; gap: 6px; align-items: center">
-    <mat-form-field appearance="fill">
+<section class="user-search">
+  <header>
+    <h2>Pesquisa de usuário no Github</h2>
+  </header>
+
+  <div class="search-container">
+    <mat-form-field appearance="fill" class="search-field">
       <mat-label>Usuário</mat-label>
       <input
         matInput
@@ -8,13 +12,29 @@
         placeholder="Digite username"
         (keydown.enter)="search()"
       />
+
+      <mat-error *ngIf="form.hasError('length') && form.touched">
+        Username deve ter entre 1 e 39 caracteres
+      </mat-error>
+      <mat-error *ngIf="form.hasError('invalidFormat') && form.touched">
+        Username inválido
+      </mat-error>
+      <mat-error *ngIf="form.hasError('emailCharacter') && form.touched">
+        Username não é um e-mail
+      </mat-error>
     </mat-form-field>
 
-    <button mat-flat-button (click)="search()">Pesquisar</button>
+    <button mat-flat-button (click)="search()" [disabled]="form.invalid">
+      Pesquisar
+    </button>
   </div>
 
-  <div style="display: flex; gap: 16px; margin-top: 16px" *ngIf="user">
-    <div>
+  <div class="spinner-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <article *ngIf="user && !isLoading" class="user-info">
+    <div class="user-avatar">
       <img
         [src]="user.avatar_url"
         [alt]="user.login + ' avatar'"
@@ -31,14 +51,13 @@
       <p>Seguidores: {{ user.followers }}</p>
       <p>Seguindo: {{ user.following }}</p>
     </div>
-  </div>
+  </article>
 
   <table
     mat-table
     [dataSource]="dataSource"
-    class="mat-elevation-z8"
-    *ngIf="user"
-    style="margin-top: 24px"
+    class="mat-elevation-z8 repository-table"
+    *ngIf="user && !isLoading"
   >
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Nome</th>
@@ -54,5 +73,8 @@
     <tr mat-row *matRowDef="let row; columns: ['name', 'stars']"></tr>
   </table>
 
-  <h3 *ngIf="this.user === undefined">Usuário não encontrado</h3>
+  <h3 *ngIf="!isLoading && !user">Nenhum registro encontrado</h3>
+  <h3 *ngIf="!isLoading && user && !dataSource.length">
+    Username não possui repositório
+  </h3>
 </section>

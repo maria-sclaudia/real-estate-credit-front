@@ -1,0 +1,44 @@
+.user-search {
+  margin: 16px;
+}
+
+header h2 {
+  margin-bottom: 16px;
+  font-size: 1.5em;
+}
+
+.search-container {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  max-width: 40vw;
+}
+
+.search-field {
+  flex: 1;
+  max-width: 100%;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.user-info {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.user-avatar img {
+  border-radius: 50%;
+}
+
+.user-details p {
+  margin: 0;
+}
+
+.repository-table {
+  margin-top: 24px;
+}
