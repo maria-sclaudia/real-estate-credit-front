@@ -1,4 +1,4 @@
-<section class="user-search">
+<body>
   <header>
     <h2>Pesquisa de usuário no Github</h2>
   </header>
@@ -36,10 +36,7 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <article
-    *ngIf="user && !(profileSearchService.isLoading$ | async)"
-    class="user-info"
-  >
+  <section *ngIf="user && !(profileSearchService.isLoading$ | async)">
     <div class="user-avatar">
       <img
         [src]="user.avatar_url"
@@ -57,7 +54,7 @@
       <p>Seguidores: {{ user.followers }}</p>
       <p>Seguindo: {{ user.following }}</p>
     </div>
-  </article>
+  </section>
 
   <table
     mat-table
@@ -92,4 +89,4 @@
   >
     Username não possui repositório
   </h3>
-</section>
+</body>

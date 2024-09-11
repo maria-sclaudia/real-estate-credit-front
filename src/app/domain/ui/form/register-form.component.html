@@ -1,173 +1,184 @@
-<header><h2>Formulário de cadastro</h2></header>
-<section class="profile-form">
-  <form [formGroup]="form">
-    <div class="form-row">
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Nome</mat-label>
-        <input matInput formControlName="name" placeholder="Digite seu nome" />
-        <mat-error
-          *ngIf="
-            form.get('name')?.hasError('required') && form.get('name')?.touched
-          "
-        >
-          Campo obrigatório
-        </mat-error>
-        <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
-          Limite de 100 caracteres
-        </mat-error>
-      </mat-form-field>
+<body>
+  <header><h2>Cadastro de usuário</h2></header>
 
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>E-mail</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          placeholder="Digite seu e-mail"
-        />
-        <mat-error
-          *ngIf="
-            form.get('email')?.hasError('required') &&
-            form.get('email')?.touched
-          "
-        >
-          Campo obrigatório
-        </mat-error>
-        <mat-error *ngIf="form.get('email')?.hasError('email')">
-          E-mail inválido
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Data de nascimento</mat-label>
-        <input
-          matInput
-          formControlName="birthdate"
-          placeholder="Digite sua data de nascimento"
-          mask="d0/M0/0000"
-        />
-        <mat-error
-          *ngIf="
-            form.get('birthdate')?.hasError('required') &&
-            form.get('birthdate')?.touched
-          "
-        >
-          Campo obrigatório
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div formArrayName="ddiPhones" class="phone-list">
-      <div
-        *ngFor="let phone of ddiPhones.controls; let i = index"
-        [formGroupName]="i"
-        class="phone-item"
-      >
-        <mat-form-field appearance="fill" class="ddi-field">
-          <mat-label>DDI</mat-label>
-          <mat-select formControlName="ddi" (selectionChange)="onDDIChange(i)">
-            <mat-option
-              *ngFor="let country of countryService.response | async"
-              [value]="country.ddi"
-            >
-              +{{ country.ddi }} ({{ country.pais }})
-            </mat-option>
-          </mat-select>
+  <section class="profile-form">
+    <form [formGroup]="form">
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nome</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Digite seu nome"
+          />
           <mat-error
             *ngIf="
-              phone.get('ddi')?.hasError('required') &&
-              phone.get('ddi')?.touched
+              form.get('name')?.hasError('required') &&
+              form.get('name')?.touched
+            "
+          >
+            Campo obrigatório
+          </mat-error>
+          <mat-error *ngIf="form.get('name')?.hasError('maxlength')">
+            Limite de 100 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>E-mail</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="Digite seu e-mail"
+          />
+          <mat-error
+            *ngIf="
+              form.get('email')?.hasError('required') &&
+              form.get('email')?.touched
+            "
+          >
+            Campo obrigatório
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">
+            E-mail inválido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Data de nascimento</mat-label>
+          <input
+            matInput
+            formControlName="birthdate"
+            placeholder="Digite sua data de nascimento"
+            mask="d0/M0/0000"
+          />
+          <mat-error
+            *ngIf="
+              form.get('birthdate')?.hasError('required') &&
+              form.get('birthdate')?.touched
             "
           >
             Campo obrigatório
           </mat-error>
         </mat-form-field>
-
-        <mat-form-field appearance="fill" class="phone-field">
-          <mat-label>Telefone</mat-label>
-          <ng-container *ngIf="phone.get('ddi')?.value === 55; else noMask">
-            <input
-              matInput
-              formControlName="phone"
-              placeholder="Digite seu telefone"
-              mask="(00) 0000-0000 || (00) 0 0000-0000"
-            />
-          </ng-container>
-
-          <ng-template #noMask>
-            <input
-              matInput
-              formControlName="phone"
-              placeholder="Digite seu telefone"
-              type="number"
-            />
-          </ng-template>
-          <mat-error
-            *ngIf="
-              phone.get('phone')?.hasError('required') &&
-              phone.get('phone')?.touched
-            "
-          >
-            Campo obrigatório
-          </mat-error>
-        </mat-form-field>
-
-        <button
-          mat-icon-button
-          *ngIf="i > 0"
-          (click)="removePhone(i)"
-          class="remove-phone-button"
-        >
-          <mat-icon>remove</mat-icon>
-        </button>
-
-        <button
-          mat-icon-button
-          (click)="addPhone()"
-          *ngIf="
-            ddiPhones.at(i).get('ddi')?.value &&
-            ddiPhones.at(i).get('phone')?.value
-          "
-          class="add-phone-button"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
       </div>
-    </div>
 
-    <div class="foreign-status">
-      <label>É pessoa estrangeira?</label>
-      <mat-radio-group formControlName="isForeign">
-        <mat-radio-button value="yes">Sim</mat-radio-button>
-        <mat-radio-button value="no">Não</mat-radio-button>
-      </mat-radio-group>
-    </div>
+      <div formArrayName="ddiPhones" class="phone-list">
+        <div
+          *ngFor="let phone of ddiPhones.controls; let i = index"
+          [formGroupName]="i"
+          class="phone-item"
+        >
+          <mat-form-field appearance="fill">
+            <mat-label>DDI</mat-label>
+            <mat-select
+              formControlName="ddi"
+              (selectionChange)="onDDIChange(i)"
+            >
+              <mat-option
+                *ngFor="let country of countryService.response | async"
+                [value]="country.ddi"
+              >
+                +{{ country.ddi }} ({{ country.pais }})
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                phone.get('ddi')?.hasError('required') &&
+                phone.get('ddi')?.touched
+              "
+            >
+              Campo obrigatório
+            </mat-error>
+          </mat-form-field>
 
-    <div class="terms-acceptance">
-      <mat-checkbox formControlName="acceptTerms"></mat-checkbox>
-      <p>
-        Aceito os
-        <a (click)="openDialog()" class="terms-link">termos de uso</a>.
-      </p>
-    </div>
-  </form>
+          <mat-form-field appearance="fill">
+            <mat-label>Telefone</mat-label>
+            <ng-container *ngIf="phone.get('ddi')?.value === 55; else noMask">
+              <input
+                matInput
+                formControlName="phone"
+                placeholder="Digite seu telefone"
+                mask="(00) 0000-0000 || (00) 0 0000-0000"
+              />
+            </ng-container>
 
-  <footer class="form-footer">
-    <button
-      mat-stroked-button
-      [disabled]="form.invalid || !form.controls.acceptTerms.value"
-      (click)="onSubmit()"
-      class="submit-button"
-    >
-      Salvar
-    </button>
-    <button mat-stroked-button (click)="onClear()" class="clear-button">
-      Limpar
-    </button>
-    <button mat-stroked-button (click)="onCancel()" class="cancel-button">
-      Cancelar
-    </button>
-  </footer>
-</section>
+            <ng-template #noMask>
+              <input
+                matInput
+                formControlName="phone"
+                placeholder="Digite seu telefone"
+                type="number"
+              />
+            </ng-template>
+            <mat-error
+              *ngIf="
+                phone.get('phone')?.hasError('required') &&
+                phone.get('phone')?.touched
+              "
+            >
+              Campo obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            *ngIf="i > 0"
+            (click)="removePhone(i)"
+            class="remove-phone-button"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            (click)="addPhone()"
+            *ngIf="
+              ddiPhones.at(i).get('ddi')?.value &&
+              ddiPhones.at(i).get('phone')?.value
+            "
+            class="add-phone-button"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="foreign-status">
+        <label>É pessoa estrangeira?</label>
+        <mat-radio-group formControlName="isForeign">
+          <mat-radio-button value="yes">Sim</mat-radio-button>
+          <mat-radio-button value="no">Não</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div class="terms-acceptance">
+        <mat-checkbox formControlName="acceptTerms"></mat-checkbox>
+        <p>
+          Aceito os
+          <a (click)="openDialog()" class="terms-link">termos de uso</a>.
+        </p>
+      </div>
+    </form>
+
+    <footer class="form-footer">
+      <button
+        mat-stroked-button
+        [disabled]="form.invalid || !form.controls.acceptTerms.value"
+        (click)="onSubmit()"
+        class="submit-button"
+      >
+        Salvar
+      </button>
+      <button mat-stroked-button (click)="onClear()" class="clear-button">
+        Limpar
+      </button>
+      <button mat-stroked-button (click)="onCancel()" class="cancel-button">
+        Cancelar
+      </button>
+    </footer>
+  </section>
+</body>
 
 <ng-template #dialogContent let-dialogRef>
   <div class="dialog-header">
