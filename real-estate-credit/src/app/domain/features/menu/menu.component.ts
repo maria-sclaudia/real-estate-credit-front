@@ -11,8 +11,4 @@ import { RouterLink } from '@angular/router';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.components.scss'],
 })
-export class MenuComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class MenuComponent {}
