@@ -28,4 +28,4 @@ Nesta tela, você pode inserir o username de um usuário do GitHub para pesquisa
 
 ![alt text](image-3.png)
 
-Para executar o projeto clique [aqui](./src/docs/details.md).
+Para executar o projeto [clique aqui](./doc.md)
