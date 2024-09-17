@@ -13,3 +13,10 @@ export type Repository = {
   html_url: string;
   stargazers_count: number;
 };
+
+export type RepositorySort = {
+  column: string;
+  direction: SortDirection;
+};
+
+export type SortDirection = 'asc' | 'desc';
