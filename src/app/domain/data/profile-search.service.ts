@@ -9,7 +9,7 @@ import {
 } from 'rxjs';
 
 import { ENVIRONMENT } from 'src/environments/environment';
-import { User, Repository } from '../types';
+import { User, Repository, RepositorySort } from '../types';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 const URL = `${ENVIRONMENT.gitHubURL}/users`;
@@ -50,20 +50,31 @@ export class ProfileSearchService {
     );
   }
 
-  getRepos(username: string): Observable<Repository[]> {
+  getRepos(
+    username: string,
+    sortParams?: RepositorySort
+  ): Observable<Repository[]> {
     if (!this.isOnline()) {
       return throwError(() => new Error('Sem conexão com a internet.'));
     }
-    this.isLoading.next(true);
 
-    return this.http.get<Repository[]>(`${URL}/${username}/repos`).pipe(
-      finalize(() => this.isLoading.next(false)),
-      catchError((err) => {
-        this._snackBar.open('Erro ao tentar encontrar repositório.', 'Close', {
-          duration: 5000,
-        });
-        return throwError(() => console.error(err));
-      })
-    );
+    const params = sortParams
+      ? { sort: sortParams.column, direction: sortParams.direction }
+      : undefined;
+
+    return this.http
+      .get<Repository[]>(`${URL}/${username}/repos`, { params: params })
+      .pipe(
+        catchError((err) => {
+          this._snackBar.open(
+            'Erro ao tentar encontrar repositório.',
+            'Close',
+            {
+              duration: 5000,
+            }
+          );
+          return throwError(() => console.error(err));
+        })
+      );
   }
 }
