@@ -58,35 +58,52 @@
 
   <table
     mat-table
-    [dataSource]="dataSource"
     class="mat-elevation-z8 repository-table"
-    *ngIf="user && !(profileSearchService.isLoading$ | async)"
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="announceSortChange($event)"
+    *ngIf="repos.length"
   >
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Nome</th>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by name"
+      >
+        Nome
+      </th>
 
       <td mat-cell *matCellDef="let repo">
         <a [href]="repo.html_url" target="_blank">{{ repo.name }}</a>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="stars">
-      <th mat-header-cell *matHeaderCellDef>Estrelas</th>
+    <ng-container matColumnDef="stargazers_count">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Sort by stars"
+      >
+        Estrelas
+      </th>
       <td mat-cell *matCellDef="let repo">{{ repo.stargazers_count }}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['name', 'stars']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['name', 'stars']"></tr>
+    <tr mat-header-row *matHeaderRowDef="['name', 'stargazers_count']"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['name', 'stargazers_count']"
+    ></tr>
   </table>
 
-  <h3 *ngIf="!(profileSearchService.isLoading$ | async) && !user">
-    Nenhum registro encontrado
-  </h3>
   <h3
     *ngIf="
-      !(profileSearchService.isLoading$ | async) && user && !dataSource.length
+      (!(profileSearchService.isLoading$ | async) && !user) || !repos.length
     "
+    class="empty-message"
   >
-    Username não possui repositório
+    Nenhum {{ !user ? "registro" : "repositório" }} encontrado
   </h3>
 </body>
